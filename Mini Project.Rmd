@@ -1,0 +1,169 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+```{r}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(caret)
+library(caretEnsemble)
+library(VIM)
+library(gridExtra)
+library(cowplot)
+library(data.table)
+library(corrplot)
+library(e1071)
+library(xgboost)
+```
+
+```{r}
+Players = read.csv("/cloud/project/world_cup_comparisons.csv")
+head(Players)
+```
+```{r}
+str(Players)
+```
+```{r}
+summary(is.na(Players))
+```
+
+```{r}
+colSums(is.na((Players)))
+```
+```{r}
+#Crosses vs Goal
+
+ggplot(Players, aes(x= crosses_z, y=goals_z)) + 
+  geom_point(size = 1, color="violet") + 
+  xlab("crosses_z") + ylab("goals_z") + 
+  ggtitle("Crosses vs Goal") +
+  theme_classic()
+
+```
+```{r}
+#Team Vs Goal
+ggplot(Players, aes(team, goals_z)) + 
+  geom_bar(stat = "identity", color = "green") +
+  theme(axis.text.x = element_text(angle = 80, vjust = 0.6, color = "red"))  +
+  ggtitle("Team Vs Goal") + theme_classic()
+```
+
+```{r}
+Players$goals_z[is.na(Players$goals_z)] <- median(Players$goals_z, na.rm = TRUE)
+summary(is.na(Players$goals_z))
+```
+
+
+```{r}
+Players$xg_z[is.na(Players$xg_z)] <- median(Players$xg_z, na.rm = TRUE)
+summary(is.na(Players$xg_z))
+
+```
+```{r}
+Players$progpasses[is.na(Players$progpasses)] <- median(Players$progpasses, na.rm = TRUE)
+summary(is.na(Players$progpasses))
+
+```
+```{r}
+Players$boxtouches[is.na(Players$boxtouches)] <- median(Players$boxtouches, na.rm = TRUE)
+summary(is.na(Players$boxtouches))
+
+```
+```{r}
+Players$passes[is.na(Players$passes)] <- median(Players$passes, na.rm = TRUE)
+summary(is.na(Players$passes))
+
+```
+
+```{r}
+Players$crosses[is.na(Players$crosses)] <- median(Players$crosses, na.rm = TRUE)
+summary(is.na(Players$crosses))
+
+```
+```{r}
+Players$passes_z[is.na(Players$passes_z)] <- median(Players$passes_z, na.rm = TRUE)
+summary(is.na(Players$passes_z))
+
+```
+```{r}
+Players$progpasses_z[is.na(Players$progpasses_z)] <- median(Players$progpasses_z, na.rm = TRUE)
+summary(is.na(Players$progpasses_z))
+
+```
+
+```{r}
+Players$takeons_z[is.na(Players$takeons_z)] <- median(Players$takeons_z, na.rm = TRUE)
+summary(is.na(Players$takeons_z))
+
+```
+
+```{r}
+Players$tackles_z[is.na(Players$tackles_z)] <- median(Players$tackles_z, na.rm = TRUE)
+summary(is.na(Players$tackles_z))
+
+```
+
+```{r}
+Players$progruns_z[is.na(Players$progruns_z)] <- median(Players$progruns_z, na.rm = TRUE)
+summary(is.na(Players$progruns_z))
+
+```
+
+```{r}
+Players$interceptions_z[is.na(Players$interceptions_z)] <- median(Players$interceptions_z, na.rm = TRUE)
+summary(is.na(Players$interceptions_z))
+
+```
+
+```{r}
+Players$clearances_z[is.na(Players$clearances_z)] <- median(Players$clearances_z, na.rm = TRUE)
+summary(is.na(Players$clearances_z))
+
+```
+
+```{r}
+Players$blocks_z[is.na(Players$blocks_z)] <- median(Players$blocks_z, na.rm = TRUE)
+summary(is.na(Players$blocks_z))
+
+```
+
+```{r}
+Players$aerials_z[is.na(Players$aerials_z)] <- median(Players$aerials_z, na.rm = TRUE)
+summary(is.na(Players$aerials_z))
+
+```
+
+```{r}
+summary(is.na(Players))
+```
+### Gaol Vs Passes
+```{R}
+ggplot(Players, aes(x= goals_z, y = passes)) + 
+  geom_point(size = 2, color="navy") + 
+  xlab("goals_z") + ylab("passes") + 
+  ggtitle("Goal Vs Passes") + 
+  theme_minimal()
+```
+###Fouls Vs Fouled
+```{r}
+ggplot(Players, aes(fouls_z, fouled_z)) + 
+  geom_bar(stat = "identity", color = "navy") +
+  theme(axis.text.x = element_text(angle = 80, vjust = 0.6, color = "yellow"))  +
+  ggtitle("Fouls Vs Fouled") + theme_classic()
+```
+```{r}
+ggplot(Players, aes(season, team))+
+  geom_bar(stat = "identity", colour = "Blue")+
+  theme(axis.title = element_text(angle = 75, vjust = 0.5,colour = "black"))+
+  xlab("season") + ylab("Team")+
+  ggtitle("season vs Team") +
+  theme_classic()
+```
+
+
+
+
+
+
+
